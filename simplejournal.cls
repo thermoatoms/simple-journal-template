@@ -44,6 +44,7 @@
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
 \RequirePackage{amsmath,amssymb}
+\RequirePackage{cite}               % compress consecutive citations: [1,2,3]→[1–3]
 \RequirePackage{hyperref}
 \RequirePackage{xcolor}
 
