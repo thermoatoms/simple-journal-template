@@ -83,6 +83,32 @@
 %% ---- Paragraph style: flush left, space between paragraphs ----
 \RequirePackage{parskip}   % sets \parindent=0pt, adds space between paragraphs
 
+%% ---- Abstract storage (used by twocolumn mode) ----
+%% In twocolumn mode, place \begin{abstract}...\end{abstract} BEFORE \maketitle.
+%% The abstract text is collected here and output inside the full-width \twocolumn[...] block.
+\newbox\@abstractbox
+\newif\if@abstractset \@abstractsetfalse
+
+%% ---- Abstract environment ----
+\renewenvironment{abstract}{%
+  \if@twocol
+    %% In twocolumn mode: collect into a box for use in \maketitle
+    \global\@abstractsettrue
+    \global\setbox\@abstractbox=\vbox\bgroup
+      \hsize=0.88\textwidth
+      \small\textbf{Abstract.}~\ignorespaces
+  \else
+    \begin{center}\begin{minipage}{0.88\textwidth}%
+      \small\textbf{Abstract.}~\ignorespaces
+  \fi
+}{%
+  \if@twocol
+    \egroup  % end \vbox
+  \else
+    \end{minipage}\end{center}\vskip 1em
+  \fi
+}
+
 %% ---- Title block ----
 \renewcommand{\maketitle}{%
   \setcounter{footnote}{0}%
@@ -94,6 +120,9 @@
       {\LARGE\bfseries\@title\par}\vskip 0.8em
       {\large\@author\par}\vskip 0.4em
       {\small\@date\par}\vskip 1.2em
+      \if@abstractset
+        \begin{center}\usebox\@abstractbox\end{center}\vskip 1em
+      \fi
     }]%
   \else
     \begin{center}
@@ -108,19 +137,6 @@
   \global\let\@thanks\@empty
   \setcounter{footnote}{0}%
   \renewcommand{\thefootnote}{\arabic{footnote}}%
-}
-
-%% ---- Abstract environment ----
-%% Place \begin{abstract}...\end{abstract} inside \begin{document}, after \maketitle.
-%% In twocolumn mode, wrap it with \maketitle inside \twocolumn[{...}] for full-width.
-\renewenvironment{abstract}{%
-  \begin{center}%
-    \begin{minipage}{0.88\textwidth}%
-      \small\textbf{Abstract.}~\ignorespaces
-}{%
-    \end{minipage}%
-  \end{center}%
-  \vskip 1em
 }
 
 %% ---- Keywords ----
