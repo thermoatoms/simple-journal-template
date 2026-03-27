@@ -72,7 +72,15 @@
 %% ---- Line numbers ----
 \if@linenumbers
   \RequirePackage[mathlines]{lineno}
-  \AtBeginDocument{\linenumbers}
+  \AtBeginDocument{%
+    \linenumbers
+    \if@twocol
+      %% In two-column mode, put numbers on the outer side of each column:
+      %% column 1 → left margin, column 2 → right margin.
+      \def\makeLineNumber{%
+        \if@firstcolumn \makeLineNumberLeft \else \makeLineNumberRight \fi}%
+    \fi
+  }%
 \fi
 
 %% ---- Section formatting (clean, no numbering clutter) ----
